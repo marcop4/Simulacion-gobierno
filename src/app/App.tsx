@@ -50,6 +50,7 @@ interface DisplayStats {
   completed: number
   avgTime: number
   totalCost: number
+  unitCost: number
   queueSizes: number[]
   utilization: number[]
   throughput: number
@@ -228,6 +229,7 @@ function computeStats(data: SimData, stations: StationDef[], costPer: number): D
     completed,
     avgTime,
     totalCost,
+    unitCost: costPer,
     queueSizes,
     utilization,
     throughput,
@@ -607,8 +609,8 @@ const COBIT_DOMAINS = [
 // ─────────────────────────────────────────────────────────────
 // KPI CARD
 // ─────────────────────────────────────────────────────────────
-function KpiCard({ label, before, after, unit = "", unitBefore, prefix = "", better = "lower", icon }: {
-  label: string; before: number; after: number; unit?: string; unitBefore?: string; prefix?: string; better?: "lower" | "higher"; icon: React.ReactNode
+function KpiCard({ label, before, after, unit = "", unitBefore, prefix = "", better = "lower", icon, subBefore, subAfter }: {
+  label: string; before: number; after: number; unit?: string; unitBefore?: string; prefix?: string; better?: "lower" | "higher"; icon: React.ReactNode; subBefore?: React.ReactNode; subAfter?: React.ReactNode
 }) {
   const improved = better === "lower" ? after < before : after > before
   const pct = before > 0 ? Math.abs((after - before) / before * 100) : 0
@@ -619,17 +621,19 @@ function KpiCard({ label, before, after, unit = "", unitBefore, prefix = "", bet
         {icon}{label}
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <div className="rounded-lg p-2.5 text-center" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
+        <div className="rounded-lg p-2.5 text-center flex flex-col items-center justify-center" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
           <div className="text-xs text-orange-400 mb-1 font-medium" style={{ fontFamily: "var(--font-display)" }}>ANTES</div>
           <div className="text-xl font-bold text-orange-300" style={{ fontFamily: "var(--font-mono)" }}>
             {prefix}{typeof before === "number" ? before.toFixed(before < 10 ? 1 : 0) : before}{unitBefore !== undefined ? unitBefore : unit}
           </div>
+          {subBefore && <div className="text-[10px] text-orange-400/70 mt-1">{subBefore}</div>}
         </div>
-        <div className="rounded-lg p-2.5 text-center" style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.2)" }}>
+        <div className="rounded-lg p-2.5 text-center flex flex-col items-center justify-center" style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.2)" }}>
           <div className="text-xs text-emerald-400 mb-1 font-medium" style={{ fontFamily: "var(--font-display)" }}>DESPUÉS</div>
           <div className="text-xl font-bold text-emerald-300" style={{ fontFamily: "var(--font-mono)" }}>
             {prefix}{typeof after === "number" ? after.toFixed(after < 10 ? 1 : 0) : after}{unit}
           </div>
+          {subAfter && <div className="text-[10px] text-emerald-400/70 mt-1">{subAfter}</div>}
         </div>
       </div>
       <div className={`flex items-center gap-1.5 text-xs font-semibold rounded-lg px-2.5 py-1.5 ${improved ? "text-emerald-400" : "text-red-400"}`}
@@ -785,7 +789,7 @@ export default function App() {
   }, [tick])
 
   const beforeStats = useMemo(() => computeStats(beforeDisplay, beforeStations, 38.35), [beforeDisplay, beforeStations])
-  const afterStats = useMemo(() => computeStats(afterDisplay, afterStations, 20.15), [afterDisplay, afterStations])
+  const afterStats = useMemo(() => computeStats(afterDisplay, afterStations, 18.58), [afterDisplay, afterStations])
 
   const handleReset = useCallback(() => {
     beforeDataRef.current = createSimData()
@@ -1064,12 +1068,14 @@ export default function App() {
                 icon={<Users size={12} />}
               />
               <KpiCard
-                label="Costo Total Incidencias"
-                before={beforeStats.totalCost}
-                after={afterStats.totalCost}
+                label="Costo Unitario por Incidencia"
+                before={beforeStats.unitCost}
+                after={afterStats.unitCost}
                 prefix="S/. "
                 better="lower"
                 icon={<DollarSign size={12} />}
+                subBefore={`Total Acum: S/. ${beforeStats.totalCost.toFixed(0)}`}
+                subAfter={`Total Acum: S/. ${afterStats.totalCost.toFixed(0)}`}
               />
               <KpiCard
                 label="Tiempo Promedio Atención"
