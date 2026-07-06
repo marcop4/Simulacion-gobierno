@@ -84,7 +84,7 @@ function makeStations(mode: "before" | "after"): StationDef[] {
   return [
     { id: "portal", label: "Portal Web", sublabel: "Sistema de Tickets · DSS02", x: xs[0], y, capacity: 20, procTicks: 5, icon: "🌐", color: "#38bdf8", glowColor: "#38bdf8", isNew: true, cobitRef: "DSS02" },
     { id: "helpdesk", label: "Mesa de Ayuda", sublabel: "Categoriza y Deriva", x: xs[1], y, capacity: 3, procTicks: 5, icon: "🎯", color: "#06b6d4", glowColor: "#06b6d4", isNew: true, cobitRef: "APO08" },
-    { id: "assign", label: "Recepción", sublabel: "Especialista en sistemas", x: xs[2], y, capacity: 2, procTicks: 5, icon: "📥", color: "#10b981", glowColor: "#10b981", cobitRef: "APO07" },
+    { id: "assign", label: "TÉCNICO", sublabel: "Especialista en sistemas", x: xs[2], y, capacity: 2, procTicks: 5, icon: "📥", color: "#10b981", glowColor: "#10b981", cobitRef: "APO07" },
     { id: "specialist", label: "Especialista N2", sublabel: "Resolución en plataforma", x: xs[3], y, capacity: 2, procTicks: 30, icon: "💻", color: "#22c55e", glowColor: "#22c55e", cobitRef: "DSS02" },
     { id: "kb", label: "Documentación", sublabel: "Especialista en sistemas", x: xs[4], y, capacity: 2, procTicks: 5, icon: "📚", color: "#a3e635", glowColor: "#a3e635", isNew: true, cobitRef: "BAI08" },
     { id: "eva", label: "Dinamizador EVA", sublabel: "Verificar documentación", x: xs[5], y, capacity: 2, procTicks: 10, icon: "📊", color: "#84cc16", glowColor: "#84cc16", cobitRef: "MEA01" },
