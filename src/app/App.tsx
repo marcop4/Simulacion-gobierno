@@ -656,7 +656,17 @@ export default function App() {
   const [tick, setTick] = useState(0)
 
   // Annotations state
-  const [annotations, setAnnotations] = useState(INITIAL_ANNOTATIONS)
+  const [annotations, setAnnotations] = useState(() => {
+    const saved = localStorage.getItem("sim_annotations")
+    if (saved) {
+      try { return JSON.parse(saved) } catch (e) { return INITIAL_ANNOTATIONS }
+    }
+    return INITIAL_ANNOTATIONS
+  })
+
+  useEffect(() => {
+    localStorage.setItem("sim_annotations", JSON.stringify(annotations))
+  }, [annotations])
   const [editingAnnotationId, setEditingAnnotationId] = useState<number | null>(null)
   const [editForm, setEditForm] = useState({ title: "", body: "" })
 
