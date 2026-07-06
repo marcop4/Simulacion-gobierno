@@ -1081,7 +1081,7 @@ export default function App() {
                 label="Tiempo Promedio Atención"
                 before={beforeStats.avgTime}
                 after={afterStats.avgTime}
-                unit=" ticks"
+                unit=" min"
                 better="lower"
                 icon={<Clock size={12} />}
               />
